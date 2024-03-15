@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище DS3Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Players">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PlayerLevel" Type="int" Nullable="false" />
+          <Property Name="PlayerClass" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlayerWeaponRelation">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+            <PropertyRef Name="Weapon_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="int" Nullable="false" />
+          <Property Name="Weapon_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Weapons">
+          <Key>
+            <PropertyRef Name="Weapon_ID" />
+          </Key>
+          <Property Name="Weapon_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WeaponName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="WeaponClass" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="WeaponDmg" Type="int" Nullable="false" />
+          <Property Name="WeaponWeight" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__PlayerWea__Playe__3B75D760">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="PlayerWeaponRelation" Type="Self.PlayerWeaponRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_ID" />
+            </Principal>
+            <Dependent Role="PlayerWeaponRelation">
+              <PropertyRef Name="Player_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PlayerWea__Weapo__3C69FB99">
+          <End Role="Weapons" Type="Self.Weapons" Multiplicity="1" />
+          <End Role="PlayerWeaponRelation" Type="Self.PlayerWeaponRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Weapons">
+              <PropertyRef Name="Weapon_ID" />
+            </Principal>
+            <Dependent Role="PlayerWeaponRelation">
+              <PropertyRef Name="Weapon_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DS3ModelContainer">
+          <EntitySet Name="Players" EntityType="Self.Players" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlayerWeaponRelation" EntityType="Self.PlayerWeaponRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Weapons" EntityType="Self.Weapons" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__PlayerWea__Playe__3B75D760" Association="Self.FK__PlayerWea__Playe__3B75D760">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="PlayerWeaponRelation" EntitySet="PlayerWeaponRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PlayerWea__Weapo__3C69FB99" Association="Self.FK__PlayerWea__Weapo__3C69FB99">
+            <End Role="Weapons" EntitySet="Weapons" />
+            <End Role="PlayerWeaponRelation" EntitySet="PlayerWeaponRelation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DS3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Players">
+          <Key>
+            <PropertyRef Name="Player_ID" />
+          </Key>
+          <Property Name="Player_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PlayerLevel" Type="Int32" Nullable="false" />
+          <Property Name="PlayerClass" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Weapons" Relationship="Self.PlayerWeaponRelation" FromRole="Players" ToRole="Weapons" />
+        </EntityType>
+        <EntityType Name="Weapons">
+          <Key>
+            <PropertyRef Name="Weapon_ID" />
+          </Key>
+          <Property Name="Weapon_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WeaponName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WeaponClass" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WeaponDmg" Type="Int32" Nullable="false" />
+          <Property Name="WeaponWeight" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Players" Relationship="Self.PlayerWeaponRelation" FromRole="Weapons" ToRole="Players" />
+        </EntityType>
+        <Association Name="PlayerWeaponRelation">
+          <End Role="Players" Type="Self.Players" Multiplicity="*" />
+          <End Role="Weapons" Type="Self.Weapons" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DS3Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Players" EntityType="Self.Players" />
+          <EntitySet Name="Weapons" EntityType="Self.Weapons" />
+          <AssociationSet Name="PlayerWeaponRelation" Association="Self.PlayerWeaponRelation">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Weapons" EntitySet="Weapons" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DS3ModelContainer" CdmEntityContainer="DS3Entities">
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="DS3Model.Players">
+              <MappingFragment StoreEntitySet="Players">
+                <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+                <ScalarProperty Name="PlayerLevel" ColumnName="PlayerLevel" />
+                <ScalarProperty Name="PlayerClass" ColumnName="PlayerClass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Weapons">
+            <EntityTypeMapping TypeName="DS3Model.Weapons">
+              <MappingFragment StoreEntitySet="Weapons">
+                <ScalarProperty Name="Weapon_ID" ColumnName="Weapon_ID" />
+                <ScalarProperty Name="WeaponName" ColumnName="WeaponName" />
+                <ScalarProperty Name="WeaponClass" ColumnName="WeaponClass" />
+                <ScalarProperty Name="WeaponDmg" ColumnName="WeaponDmg" />
+                <ScalarProperty Name="WeaponWeight" ColumnName="WeaponWeight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PlayerWeaponRelation" TypeName="DS3Model.PlayerWeaponRelation" StoreEntitySet="PlayerWeaponRelation">
+            <EndProperty Name="Players">
+              <ScalarProperty Name="Player_ID" ColumnName="Player_ID" />
+            </EndProperty>
+            <EndProperty Name="Weapons">
+              <ScalarProperty Name="Weapon_ID" ColumnName="Weapon_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
